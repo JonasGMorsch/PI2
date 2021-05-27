@@ -8,5 +8,4 @@ Avitidades referentes ao Projeto Integrador 2
 
   Como objetivo terciário temos o comportamento natural, chamado de “big data” quando não somente os dispositivos tem controle por servidores, mas quando esses servidores que entregam os serviços de automação também armazenam os dados, e compartilham esses dados com servidores de análise, que, utilizando de múltiplas técnicas de processamento de dados é possível descrever e então prever o comportamento médio de uma cidade, e automatizá-la como um todo, temos exemplos primordiais dessa tecnologia utilizando smartfones, como a [WiGLE](https://wigle.net/), que utiliza da rede, gps e dispositivos wifi para um mapa de rede que dispensa wifi para áreas urbanas.
 
-
-![Mapa de Redes wifi da região](./figuras/Imagem 1.png)
+![Mapa de Redes wifi da região](https://github.com/JonasGMorsch/PI2/blob/main/figuras/Imagem%201.png?raw=true)
