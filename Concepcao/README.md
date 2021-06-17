@@ -45,22 +45,22 @@ Usa-se os termos produtos, processos e sistemas para designar as soluções que 
 
 ## Requisitos:
 
-* O servidor deve ser independente e assíncrono, ou seja, uma ação pedida para ser executada fica armazenada no servidor até ser possível entregá-la ao modulo de controle corespondente.
+* O servidor deve ser independente e assíncrono, ou seja, uma ação pedida para ser executada fica armazenada no servidor até ser possível entregá-la ao modulo de controle corespondente
 
 
 * Controle dos dispositivos:
   * Via internet
-  * Por aplicativo.
+  * Por aplicativo
 
 
-* Módulos de controle devem fazer a comunicação via WiFi.
+* Módulos de controle devem fazer a comunicação via WiFi
 
 
 * Automatização sistema de som:
-  * Ligar e desligar a TV via infravermelho.
+  * Ligar e desligar a TV via infravermelho
   * Ligar e desligar amplificador junto com a tv
   * Regular o volume utilizando o controle da tv
-  * Controlar ar condicionado via infravermelho.
+  * Controlar ar condicionado via infravermelho
   
  
 
