@@ -1,6 +1,3 @@
-# PI2
-Avitidades referentes ao Projeto Integrador 2 
-
 # Apresentação
   A Domótica, do francês Domotique (Domus significa casa e Imotique significa automática), hoje mais referida como automação residencial, tem como objetivo primário a automação de componentes eletrônicos residenciais através de redes como WiFi, Bluetooth, LoRa em configurações simples, mesh, bridge entres outras, visando comunicar dados entre múltiplos dispositivos, criando serviços que podem ser automatizados e agendados pelo dono da residência.
 
