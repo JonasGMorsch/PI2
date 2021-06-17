@@ -63,7 +63,18 @@ Usa-se os termos produtos, processos e sistemas para designar as soluções que 
   * Controlar ar condicionado via infravermelho
   
  
+* Controlar a iluminação dos cômodos.
 
+
+* Sensor de presença para o jardim
+ * Liga a iluminação externa  
+
+
+Sensor de gás.
+ * Dispara um sinal sonoro
+
+
+Servomotor portão eletrônico.
 
 
 
