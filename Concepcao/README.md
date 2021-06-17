@@ -74,7 +74,7 @@ Usa-se os termos produtos, processos e sistemas para designar as soluções que 
  * Dispara um sinal sonoro
 
 
-*Servomotor portão eletrônico.
+* Servomotor portão eletrônico.
 
 
 
