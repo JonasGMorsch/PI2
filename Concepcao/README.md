@@ -65,6 +65,7 @@ Usa-se os termos produtos, processos e sistemas para designar as soluções que 
  
 * Controlar a iluminação dos cômodos.
 
+* Sensor de presença 
+  * Ligar Iluminação 
+  * Mostar no aplicativo se detectou alguém
 
-* Sensor de presença para o jardim
-  * Liga a iluminação externa 
