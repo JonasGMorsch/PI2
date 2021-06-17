@@ -49,8 +49,8 @@ Usa-se os termos produtos, processos e sistemas para designar as soluções que 
 
 
 * Controle dos dispositivos:
-  * Via internet
-  * Por aplicativo
+  * Via internet (Protocolo IPV6)
+  * Por aplicativo, MMQTT Dash (loT, Smart Home), configurado manualmente.
 
 
 * Módulos de controle devem fazer a comunicação via WiFi
