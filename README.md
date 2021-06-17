@@ -1,6 +1,4 @@
-# PI2
-Avitidades referentes ao Projeto Integrador 2 
-
+# Projeto Integrador 2
 ### [Apresentação](https://github.com/JonasGMorsch/PI2/blob/main/apresentacao/apresentacao.md)
  
 ## Projeto utilizando modelo [CDIO](http://www.cdio.org/about):
