@@ -1,4 +1,4 @@
-# Apresentação
+# Contextualizando o tema
   A Domótica, do francês Domotique (Domus significa casa e Imotique significa automática), hoje mais referida como automação residencial, tem como objetivo primário a automação de componentes eletrônicos residenciais através de redes como WiFi, Bluetooth, LoRa em configurações simples, mesh, bridge entres outras, visando comunicar dados entre múltiplos dispositivos, criando serviços que podem ser automatizados e agendados pelo dono da residência.
 
   Como objetivo secundário é o controle a distância, quando esses sistemas possuem não somente comunicação entre si, mas comunicação com a Internet, ampliando significativamente a capacidade de automação já que servidores podem participar desse grupo de dispositivos, tomando decisões além das do dono da residência.
