@@ -31,8 +31,11 @@ Trata-se daquilo que é iniludível ou imprescindível para o desenvolvimento de
 Definir as necessidades do cliente, considerando tecnologia, estratégia empresarial e regulamentos e desenvolvimento de planos conceituais, técnicos e de negócios.
 
 Os engenheiros também estão envolvidos na definição da solução, que envolve a compreensão das necessidades do cliente ou da sociedade, identificando novas tecnologias que podem ser infundidas e criando os requisitos de alto nível e a estratégia para a solução.
+
 É a identificação do problema ou oportunidade a ser empreendida.
+
 A concepção é fundamental para a engenharia e é distinta do design; conceber é decidir o que será projetado.
+
 A tarefa central da engenharia é conceber, projetar, implementar e operar produtos, processos e sistemas que não existiam anteriormente e que atendem direta ou indiretamente à sociedade ou a segmentos da sociedade.
 Usa-se os termos produtos, processos e sistemas para designar as soluções que os engenheiros criam.
 
