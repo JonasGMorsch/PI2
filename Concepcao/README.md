@@ -70,11 +70,11 @@ Usa-se os termos produtos, processos e sistemas para designar as soluções que 
  * Liga a iluminação externa  
 
 
-Sensor de gás.
+*Sensor de gás.
  * Dispara um sinal sonoro
 
 
-Servomotor portão eletrônico.
+*Servomotor portão eletrônico.
 
 
 
