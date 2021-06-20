@@ -1,6 +1,6 @@
 #define HOST_NAME "TESTNODE" //OTA NAME
 #define DTIM 10 // 0 FULL ON - 1 LESS LATENCY - 10 LESS POWER
-#include "lala.h"  //MY LIBRARY WRAPER
+#include "JONAS_MQTT.h"  //MY LIBRARY WRAPER
 //define DEBUG
 
 //////////////////////////////////// MQTT SUB TOPICS ////////////////////////////////////
