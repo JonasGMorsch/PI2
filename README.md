@@ -1,7 +1,7 @@
-# Projeto Integrador 2 : [Domótica](https://github.com/JonasGMorsch/PI2/blob/main/Contextualizacao/contextualizacao.md)
+# Projeto Integrador 2 : [Domótica](/Contextualizacao/README.md)
  
 ## Projeto utilizando modelo [CDIO](http://www.cdio.org/about) :
-* [Concepção](https://github.com/JonasGMorsch/PI2/blob/main/Concepcao/README.md) &larr; Etapa atual
-* [Projeto](https://github.com/JonasGMorsch/PI2/blob/main/Projeto/README.md)
-* [Implementação](https://github.com/JonasGMorsch/PI2/blob/main/Implemantacao/README.md)
-* [Operação](https://github.com/JonasGMorsch/PI2/blob/main/Operacao/README.md)
+* [Concepção](/Concepcao/README.md) 
+* [Projeto](/Projeto/README.md) &larr; Etapa atual
+* [Implementação](/Implemantacao/README.md)  &larr; Separando Bibliotecas e Componentes 
+* [Operação](/Operacao/README.md)
