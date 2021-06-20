@@ -4,7 +4,7 @@
 #include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
-#include <J_IDs.h>
+#include <J_IDs.h> // Logins e Senhas Wifi e MQTT
 
 #define LED D4  //LED!
 #define CHIP_ID String(ESP.getChipId()).c_str()
