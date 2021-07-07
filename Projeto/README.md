@@ -1,6 +1,6 @@
 # Projeto
 
-Componentes Utilizados:
+## Componentes Utilizados:
 
 01 Node MCU v1 - Microcontrolador baseado no [Esp8266](https://www.espressif.com/sites/default/files/documentation/0a-esp8266ex_datasheet_en.pdf)
 
@@ -14,8 +14,9 @@ Componentes Utilizados:
 
 01 [VSMY98545ADS](https://www.vishay.com/docs/84390/vsmy98545ads.pdf) - Led Infravermelho 3W
 
- ![Projeto](../Projeto/PI2_schem.png) 
+## Esquemático de Montagem:
+![Projeto](../Projeto/PI2_schem.png) 
  
- A escolha de GPIO foi direcionada pelo seu comportamentos na inicialização: 
- ![Projeto](../Projeto/GPIO_Limitations_ESP8266_NodeMCU.jpg) 
+A escolha de GPIO foi direcionada pelo seu comportamentos na inicialização: 
+![Projeto](../Projeto/GPIO_Limitations_ESP8266_NodeMCU.jpg) 
 
