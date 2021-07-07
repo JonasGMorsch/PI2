@@ -12,8 +12,7 @@ Componentes Utilizados:
 
 01 [VS1838](http://eeshop.unl.edu/pdf/VS1838-Infrared-Receiver-datasheet.pdf) - Receptor IR
 
-01 [VSMY98545ADS](https://www.vishay.com/docs/84390/vsmy98545ads.pdf) - Led Infravermelho, comprimento de onda de 850nm, ângulo de emisão 45º 
-
+01 [VSMY98545ADS](https://www.vishay.com/docs/84390/vsmy98545ads.pdf) - Led Infravermelho 3W
 
  ![Projeto](../Projeto/PI2_schem.png) 
  
