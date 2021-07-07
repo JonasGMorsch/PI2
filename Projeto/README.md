@@ -1,3 +1,3 @@
 # Projeto
 
- ![Concepção](../Projeto/PI2_schem.png) 
+ ![Projeto](../Projeto/PI2_schem.png) 
