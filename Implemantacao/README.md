@@ -13,7 +13,7 @@ Datasheet : http://datasheet.elcodis.com/pdf2/76/14/761466/fm62429.pdf
 
 ### Controle Infravermelho
 https://github.com/crankyoldgit/IRremoteESP8266
-![Teste VS1838](/Implemantacao/Teste_VS1838.png) 
+![Teste VS1838](/Implemantacao/IRrecvDumpV2/Teste_VS1838.png) 
 
 # Não Testadas:
 
