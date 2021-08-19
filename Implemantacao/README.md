@@ -6,16 +6,17 @@ https://github.com/esp8266/Arduino
 ### Biblioteca MQTT
 https://github.com/knolleary/pubsubclient
 
-
 ### Controle de Volume
 https://github.com/CGrassin/M62429_Arduino_Library
 
 Datasheet : http://datasheet.elcodis.com/pdf2/76/14/761466/fm62429.pdf
 
-# Não Testadas:
-
 ### Controle Infravermelho
 https://github.com/crankyoldgit/IRremoteESP8266
+![Teste VS1838](/Implemantacao/Teste_VS1838.png) 
+
+# Não Testadas:
+
 
 Tipo de IR a ser usada : https://clickermart.com/blogs/news/what-is-the-wavelength-of-the-infrared-used-in-remote-controls/
 
