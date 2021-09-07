@@ -6,7 +6,7 @@
 
 01 [GY-21](https://cdn-shop.adafruit.com/datasheets/1899_HTU21D.pdf) - Sensor de Temperatura e Humidade
 
-02 [FM62429](http://datasheet.elcodis.com/pdf2/76/14/761466/fm62429.pdf) - Controle de Volume Digital
+02 [FM62429](http://nice.kaze.com/M62429.pdf) - Controle de Volume Digital
 
 01 [TPA3255](https://www.ti.com/lit/ds/symlink/tpa3255.pdf) - Amplificador 4 canais
 
