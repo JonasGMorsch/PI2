@@ -20,7 +20,11 @@
 #define IR_RECORDER D9
 
 // VARIABLES & GLOBAL OBJECTS
+void setVolume(uint32_t);
 void setDataFM(uint32_t, uint32_t, uint32_t);
+
+//uint32_t amp_volume = 45;
+uint32_t sub_level_adj = 10;
 
 void MQTT_Handler(String topic, String msg)
 {
@@ -31,14 +35,14 @@ void MQTT_Handler(String topic, String msg)
       delay (100);
     }
   }
-  
+
   else if (topic == TOPIC_SUB1) //VOLUME
   {
     int amp_volume = msg.toInt();
     setDataFM(amp_volume, VOLUME_SCL_MAIN, VOLUME_SDA);
     MQTT.publish(TOPIC_SUB1 "/status", String(amp_volume).c_str(), true);
   }
-  
+
 }
 
 void setup()
@@ -65,6 +69,15 @@ void loop()
 }
 
 // this function does the job
+void setVolume(uint32_t v)
+{
+  v = min(v, 83U);
+  setDataFM(v, VOLUME_SCL_MAIN, VOLUME_SDA);
+
+  v += sub_level_adj - 10;
+  v = min(v, 83U);
+  setDataFM(v, VOLUME_SCL_BASS, VOLUME_SDA);
+}
 void setDataFM (uint32_t volume, uint32_t serial_clock, uint32_t serial_data)
 {
   //pinMode(serial_data, OUTPUT);
