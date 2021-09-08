@@ -20,3 +20,39 @@ https://github.com/crankyoldgit/IRremoteESP8266
 Tipo de IR a ser usada : https://clickermart.com/blogs/news/what-is-the-wavelength-of-the-infrared-used-in-remote-controls/
 
 Loja : https://www.aliexpress.com/item/32995488646.html
+
+
+# Módulos:
+
+## Controle de Volume e filtro passa baixa:
+
+<p align="center">
+<img src="/Implemantacao/Imagens/1.jpg?raw=true" width="36%"> <img src="/Implemantacao/Imagens/2.jpg?raw=true" width="33%">
+</p>
+
+## Amplificador, adaptado para receber a placa de controle de volume, desacoplador DC para o sinal do subwoffer e entrada P2:
+
+<p align="center">
+  <img src="/Implemantacao/Imagens/3.jpg?raw=true" width="40%"> 
+</p>
+<p align="center">
+  <img src="/Implemantacao/Imagens/4.jpg?raw=true" width="40%"> 
+  <img src="/Implemantacao/Imagens/5.jpg?raw=true" width="40%"> 
+</p>
+
+## Amplificador montado:
+
+<p align="center">
+<img src="/Implemantacao/Imagens/6.jpg?raw=true" width="50%" align="center">
+</p>
+
+## Placa do microcontrolador, contendo os módulos Infravermelho e sensor de temperatura:
+
+<p align="center">
+<img src="/Implemantacao/Imagens/7.jpg?raw=true" width="44%"> <img src="/Implemantacao/Imagens/8.jpg?raw=true" width="21.8%"> <img src="/Implemantacao/Imagens/9.jpg?raw=true" width="33%"> 
+</p>
+
+## Todos os Módulos conectados:
+<p align="center">
+<img src="/Implemantacao/Imagens/10.jpg?raw=true" width="70%">
+</p>
