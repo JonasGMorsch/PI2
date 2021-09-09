@@ -3,7 +3,7 @@
 //define DEBUG
 
 //////////////////////////////////// MQTT SUB TOPICS ////////////////////////////////////
-#define TOPIC_SUB1  "house/jonasbedroom/tv/switch/status"
+//#define TOPIC_SUB1  "house/jonasbedroom/tv/switch/status" no need to know tv status here
 #define TOPIC_SUB2  "house/jonasbedroom/tv/control"
 
 #define TOPIC_SUB3  "house/jonasbedroom/sound/volume/0t100"
@@ -62,22 +62,7 @@ decode_results results;  // Somewhere to store the results
 
 void MQTT_Handler(String topic, String msg)
 {
-  //DEVICES STATUS
-  static bool tvpower = 0; //INITIAL STATE
-
-  if (topic == TOPIC_SUB1)
-  {
-    if (tvpower == 0 && msg.toInt() == 1)
-    {
-      tvpower = 1;
-    }
-    else if (tvpower == 1 && msg.toInt() == 0)
-    {
-      tvpower = 0;
-    }
-  }
-
-  else if (topic == TOPIC_SUB2)
+  if (topic == TOPIC_SUB2)
   {
     if (msg == "power" || msg ==  "0" || msg ==  "1")
       IR_SEND.sendSAMSUNG(0xE0E040BF); // POWER
@@ -113,6 +98,17 @@ void MQTT_Handler(String topic, String msg)
       IR_SEND.sendSAMSUNG(0xE0E0B44B); // EXIT
     else if (msg == "back")
       IR_SEND.sendSAMSUNG(0xE0E0A25D); // BACK
+    else if (msg == "play")
+    {
+      IR_SEND.sendSAMSUNG(0xE0E0E21D); // PLAY
+      MQTT.publish(TOPIC_SUB2 "/status", "play", false);
+    }
+    else if (msg == "pause")
+    {
+      IR_SEND.sendSAMSUNG(0xE0E052AD); // PAUSE
+      //MQTT.publish((String(TOPIC_SUB2) + "/status").c_str(), "pause", false);
+      MQTT.publish(TOPIC_SUB2 "/status", "pause", false);
+    }
   }
   else if (topic == TOPIC_SUB3) //VOLUME
   {
@@ -176,9 +172,8 @@ void MQTT_Handler(String topic, String msg)
     if (msg.toInt() >= 16 && msg.toInt() <= 30)
     {
       MQTT.publish(TOPIC_SUB8 "/status", msg.c_str(), true);
-      IR_SEND_AC.setTemp(msg.toInt());
-      if (IR_SEND_AC.getPower())
-        IR_SEND_AC.send();
+      subed_temp = msg.toFloat();
+      Temp_Check();
     }
   }
   else if (topic == TOPIC_SUB9) // BEEP
@@ -243,7 +238,7 @@ void MQTT_Handler(String topic, String msg)
     }
   }
 
-  else if (topic == TOPIC_SUB10)
+  else if (topic == TOPIC_SUB10) // POWER
   {
     MQTT.publish(TOPIC_SUB10 "/status", msg.c_str(), true);
     if (msg.toInt())
@@ -262,7 +257,6 @@ void MQTT_Handler(String topic, String msg)
 
 void IR_Loop()
 {
-  //delay(50);
   digitalWrite(LED, LOW);
   switch (results.value)
   {
@@ -371,23 +365,22 @@ void loop()
     IR_REC.resume();  // Receive the next value
     IR_Loop();
   }
-
-  esp8266::polledTimeout::periodic static temp_timer(10000);
+  
+  esp8266::polledTimeout::periodic static temp_timer(10000); // go to teperature loop every 10 seconds
   if (temp_timer)
     Temp_Check();
 
-  esp8266::polledTimeout::periodic static amp_volume_timer(250);
-  if (amp_volume_timer)
-  {
+  esp8266::polledTimeout::periodic static amp_volume_timer(250);  // A watcher to update volume, since it can be alteraded
+  if (amp_volume_timer)                                           // by 2 async functions, also prevents mqtt udp
+  {                                                               // packets floding when changing volume on tv control
     static uint32_t amp_volume_temp;
     if (amp_volume != amp_volume_temp)
     {
       amp_volume_temp = amp_volume;
-      MQTT.publish(TOPIC_SUB4 "/status", "0", true); // UNMUTE
+      MQTT.publish(TOPIC_SUB4 "/status", "0", true); // unmute and send state to server
       MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true);
     }
   }
-
   servicesLoop();
 }
 
