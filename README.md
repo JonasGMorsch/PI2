@@ -2,6 +2,6 @@
  
 ## Projeto utilizando modelo [CDIO](http://www.cdio.org/about) :
 * [Concepção](/Concepcao/README.md) 
-* [Design](/Design/README.md) &larr; Etapa atual
-* [Implementação](/Implemantacao/README.md)  &larr; Preparando função para o FM62429 
+* [Design](/Design/README.md) 
+* [Implementação](/Implemantacao/README.md)  &larr; Etapa atual
 * [Operação](/Operacao/README.md)
