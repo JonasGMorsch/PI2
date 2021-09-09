@@ -17,11 +17,12 @@
 ## Esquemático de Montagem utizando o [Fritzing](https://fritzing.org): 
 ### [Download PI2.fzz](/Design/PI2.fzz)
 
-![Design](/Design/PI2_schem.png) 
+![ ](/Design/PI2_schem.png?raw=true) 
  
 A escolha de GPIO foi direcionada pelo seu comportamentos na inicialização: 
-![Design](/Design/GPIO_Limitations_ESP8266_NodeMCU.jpg) 
+![ ](/Design/GPIO_Limitations_ESP8266_NodeMCU.jpg?raw=true) 
 
 
-Segundo esquemático, com todos os componentes definidos.
-![Design](/Design/Circuito_Completo.BMP) 
+## Segundo esquemático, com todos os componentes e pinos definidos.
+![ ](/Design/Circuito_Completo.BMP?raw=true) 
+
