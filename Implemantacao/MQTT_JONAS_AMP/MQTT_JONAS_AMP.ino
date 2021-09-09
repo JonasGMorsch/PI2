@@ -43,11 +43,15 @@ void setDataFM(uint32_t, uint32_t, uint32_t);
 void Temp_Check(void);
 
 // VARIABLES & GLOBAL OBJECTS
+
 GY21 sensor;
+
 uint32_t amp_volume = 45;
 uint32_t sub_level_adj = 10; // Sub Volume is the same as the main volume
 uint32_t amp_mute_control;
 const uint32_t amp_mute_volume = 13;
+
+float subed_temp;
 
 //IRrecv IR_REC(IR_RECORDER, 128, 5, false); //TEST THIS!!!
 IRrecv IR_REC(IR_RECORDER);
@@ -352,10 +356,35 @@ void Temp_Check(void)
     MQTT.publish(TOPIC_PUB_HUM, (String(hum, 1)).c_str(), true);
     published_hum = roundf(hum * 10.0) / 10.0;
   }
+
   if (IR_SEND_AC.getPower())
   {
     esp8266::polledTimeout::periodic static ac_send(300000); // resend ac value every 5 minutes
     if (ac_send)
       IR_SEND_AC.send();
+    //const uint8_t kSamsungAcAuto = 0;
+    //const uint8_t kSamsungAcCool = 1;
+    //const uint8_t kSamsungAcDry = 2;
+    //const uint8_t kSamsungAcFan = 3;
+    //const uint8_t kSamsungAcHeat = 4;
+
+    if ( ! IR_SEND_AC.getMode() == kSamsungAcFan )
+    {
+      static double ac_temp_integral;
+      if ( abs ( ac_temp_integral ) < 3.f ) // limit value to +-3 Celsius shift
+        //ac_temp_integral = (ac_temp_integral + ( subed_temp - temp )) / 2.0; //
+        ac_temp_integral += ( subed_temp - temp ) / 18.0; // 3 minutes to make a full shift
+      else
+        ac_temp_integral *= 0.9f; // +- 3 goes to +- 2.7
+      uint32_t ac_temp = round( subed_temp + ((subed_temp - temp) * 3 ) + ac_temp_integral );
+
+      if ( ac_temp != IR_SEND_AC.getTemp() )
+      {
+        IR_SEND_AC.setTemp(ac_temp);
+        IR_SEND_AC.send();
+        MQTT.publish("debug", (String ("ac: ") + String (ac_temp) + (String ("\npi: ") + String (ac_temp_integral, 3))).c_str() , true);
+        ac_send.reset();
+      }
+    }
   }
 }
