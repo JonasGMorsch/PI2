@@ -365,14 +365,14 @@ void loop()
     IR_REC.resume();  // Receive the next value
     IR_Loop();
   }
-  
+
   esp8266::polledTimeout::periodic static temp_timer(10000); // go to teperature loop every 10 seconds
   if (temp_timer)
     Temp_Check();
 
   esp8266::polledTimeout::periodic static amp_volume_timer(250);  // A watcher to update volume, since it can be alteraded
   if (amp_volume_timer)                                           // by 2 async functions, also prevents mqtt udp
-  {                                                               // packets floding when changing volume on tv control
+  { // packets floding when changing volume on tv control
     static uint32_t amp_volume_temp;
     if (amp_volume != amp_volume_temp)
     {
@@ -445,34 +445,31 @@ void Temp_Check(void)
     published_hum = roundf(hum * 10.0) / 10.0;
   }
 
-  if (IR_SEND_AC.getPower())
+  //const uint8_t kSamsungAcAuto = 0;
+  //const uint8_t kSamsungAcCool = 1;
+  //const uint8_t kSamsungAcDry = 2;
+  //const uint8_t kSamsungAcFan = 3;
+  //const uint8_t kSamsungAcHeat = 4;
+
+  if ((IR_SEND_AC.getPower() || (IR_SEND_AC.getMode() != kSamsungAcFan)))
   {
     esp8266::polledTimeout::periodic static ac_send(300000); // resend ac value every 5 minutes
     if (ac_send)
       IR_SEND_AC.send();
-    //const uint8_t kSamsungAcAuto = 0;
-    //const uint8_t kSamsungAcCool = 1;
-    //const uint8_t kSamsungAcDry = 2;
-    //const uint8_t kSamsungAcFan = 3;
-    //const uint8_t kSamsungAcHeat = 4;
 
-    if (!( IR_SEND_AC.getMode() == kSamsungAcFan ))
+    static double ac_temp_integral;
+    if ( abs ( ac_temp_integral ) < 3.f ) // limit value to +-3 Celsius shift
+      ac_temp_integral += ( subed_temp - temp ) / 18.0; // 3 minutes to make a full shift
+    else
+      ac_temp_integral *= 0.9f; // +- 3 goes to +- 2.7
+    uint32_t ac_temp = round( subed_temp + ((subed_temp - temp) * 3 ) + ac_temp_integral );
+
+    if ( ac_temp != IR_SEND_AC.getTemp() )
     {
-      static double ac_temp_integral;
-      if ( abs ( ac_temp_integral ) < 3.f ) // limit value to +-3 Celsius shift
-        //ac_temp_integral = (ac_temp_integral + ( subed_temp - temp )) / 2.0; //
-        ac_temp_integral += ( subed_temp - temp ) / 18.0; // 3 minutes to make a full shift
-      else
-        ac_temp_integral *= 0.9f; // +- 3 goes to +- 2.7
-      uint32_t ac_temp = round( subed_temp + ((subed_temp - temp) * 3 ) + ac_temp_integral );
-
-      if ( ac_temp != IR_SEND_AC.getTemp() )
-      {
-        IR_SEND_AC.setTemp(ac_temp);
-        IR_SEND_AC.send();
-        MQTT.publish("debug", (String ("ac: ") + String (ac_temp) + (String ("\npi: ") + String (ac_temp_integral, 3))).c_str() , true);
-        ac_send.reset(); // signal sent, no need to send untill the next timestep
-      }
+      IR_SEND_AC.setTemp(ac_temp);
+      IR_SEND_AC.send();
+      MQTT.publish("debug", (String ("ac: ") + String (ac_temp) + (String ("\npi: ") + String (ac_temp_integral, 3))).c_str() , true);
+      ac_send.reset(); // signal sent, no need to resend until the next ac_send timestep
     }
   }
 }
