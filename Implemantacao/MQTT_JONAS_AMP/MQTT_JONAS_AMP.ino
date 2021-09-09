@@ -169,24 +169,19 @@ void IR_Loop()
 
 void setup()
 {
-  pinMode(D0, INPUT_PULLUP);
-  pinMode(D1, INPUT_PULLUP);
-  pinMode(D2, INPUT_PULLUP);
-  pinMode(D3, INPUT_PULLUP);
-  // D4 RESERVED FOR LED
-  pinMode(D5, INPUT_PULLUP);
-  pinMode(D6, INPUT_PULLUP);
-  pinMode(D7, INPUT_PULLUP);
-  pinMode(D8, INPUT_PULLUP);
-  pinMode(D9, INPUT_PULLUP);
-  pinMode(D10, INPUT_PULLUP);
+  pinMode(VOLUME_SCL_MAIN, OUTPUT);
+  pinMode(VOLUME_SCL_BASS, OUTPUT);
+  pinMode(VOLUME_SDA, OUTPUT);
 
   servicesSetup();
 
   IR_REC.setUnknownThreshold(32); // MINIMUM READABLE BYTE SET
   IR_REC.enableIRIn();  // Start the receiver
   IR_SEND.begin(); // Start the sender
-
+  IR_SEND_AC.begin(); // Start AC sender
+  IR_SEND_AC.setIon(1); // VIRUS DOCTOR
+  IR_SEND_AC.setPower(0);
+  
   Wire.TwoWire::begin(SDA, SCL);
   Wire.TwoWire::setClock(400000);
 }
@@ -202,7 +197,19 @@ void loop()
   esp8266::polledTimeout::periodic static temp_timer(10000);
   if (temp_timer)
     Temp_Check();
-
+    
+  esp8266::polledTimeout::periodic static amp_volume_timer(250);
+  if (amp_volume_timer)
+  {
+    static uint32_t amp_volume_temp;
+    if (amp_volume != amp_volume_temp)
+    {
+      amp_volume_temp = amp_volume;
+      MQTT.publish(TOPIC_SUB4 "/status", "0", true); // UNMUTE
+      MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true);
+    }
+  }
+  
   servicesLoop();
 }
 
