@@ -15,6 +15,9 @@
 #define TOPIC_SUB8  "house/jonasbedroom/ac/temperature/16t30"
 #define TOPIC_SUB9  "house/jonasbedroom/ac/beep/switch"
 #define TOPIC_SUB10 "house/jonasbedroom/ac/power/switch"
+
+#define TOPIC_SUB11  "house/jonasbedroom/sound/sublvl/0t10"
+
 //////////////////////////////////// MQTT PUB TOPICS ////////////////////////////////////
 #define TOPIC_PUB_TEMP  "house/jonasbedroom/bedroom/temperature/status"
 #define TOPIC_PUB_HUM   "house/jonasbedroom/bedroom/humidity/status"
@@ -253,6 +256,15 @@ void MQTT_Handler(String topic, String msg)
       //IR_SEND_AC.send(); // NOT WORKING FOR POWER OFF
     }
   }
+  else if (topic == TOPIC_SUB11) //SUB LEVEL
+  {
+    if (msg.toInt() >= 0 && msg.toInt() <= 20)
+    {
+      sub_level_adj = msg.toInt();
+      MQTT.publish(TOPIC_SUB11 "/status", msg.c_str(), true);
+      MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true); //Force sub volume calculations
+    }
+  }
 }
 
 void IR_Loop()
@@ -445,13 +457,7 @@ void Temp_Check(void)
     published_hum = roundf(hum * 10.0) / 10.0;
   }
 
-  //const uint8_t kSamsungAcAuto = 0;
-  //const uint8_t kSamsungAcCool = 1;
-  //const uint8_t kSamsungAcDry = 2;
-  //const uint8_t kSamsungAcFan = 3;
-  //const uint8_t kSamsungAcHeat = 4;
-
-  if ((IR_SEND_AC.getPower() || (IR_SEND_AC.getMode() != kSamsungAcFan)))
+  if ((IR_SEND_AC.getPower() && (IR_SEND_AC.getMode() != kSamsungAcFan)))
   {
     esp8266::polledTimeout::periodic static ac_send(300000); // resend ac value every 5 minutes
     if (ac_send)
@@ -462,7 +468,7 @@ void Temp_Check(void)
       ac_temp_integral += ( subed_temp - temp ) / 18.0; // 3 minutes to make a full shift
     else
       ac_temp_integral *= 0.9f; // +- 3 goes to +- 2.7
-    uint32_t ac_temp = round( subed_temp + ((subed_temp - temp) * 3 ) + ac_temp_integral );
+    int32_t ac_temp = round( subed_temp + ((subed_temp - temp) * 3 ) + ac_temp_integral );
 
     if ( ac_temp != IR_SEND_AC.getTemp() )
     {

@@ -67,7 +67,6 @@ void initWiFi()
   ArduinoOTA.begin();
 }
 
-
 void mqttCallback(char* t, byte* payload, uint32_t length)
 {
   String msg;
@@ -113,7 +112,7 @@ void MQTT_Whatchdog()
 
 #ifdef TOPIC_SUB1
       MQTT.subscribe(TOPIC_SUB1, 1);
-
+#endif
 #ifdef TOPIC_SUB2
       MQTT.subscribe(TOPIC_SUB2, 1);
 #endif
@@ -141,6 +140,11 @@ void MQTT_Whatchdog()
 #ifdef TOPIC_SUB10
       MQTT.subscribe(TOPIC_SUB10, 1);
 #endif
+#ifdef TOPIC_SUB11
+      MQTT.subscribe(TOPIC_SUB11, 1);
+#endif
+#ifdef TOPIC_SUB12
+      MQTT.subscribe(TOPIC_SUB12, 1);
 #endif
     }
 #ifdef DEBUG
