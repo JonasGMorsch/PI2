@@ -352,4 +352,10 @@ void Temp_Check(void)
     MQTT.publish(TOPIC_PUB_HUM, (String(hum, 1)).c_str(), true);
     published_hum = roundf(hum * 10.0) / 10.0;
   }
+  if (IR_SEND_AC.getPower())
+  {
+    esp8266::polledTimeout::periodic static ac_send(300000); // resend ac value every 5 minutes
+    if (ac_send)
+      IR_SEND_AC.send();
+  }
 }
