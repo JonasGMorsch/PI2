@@ -17,15 +17,27 @@ https://github.com/crankyoldgit/IRremoteESP8266
 
 # Módulos:
 
-## Controle de Volume e filtro passa baixa:
+## Controle de Volume:
 
-Esta placa contém os dois FM62429, os capacidores de desacoplamento DC, filtro passa baixa para os canais do subwoofer. A alimentacão vem da fonte 48V que alimenta o amplificador, sendo reduzida para 12V por uma conversor buck devidamente filtrado, e por último, passando pelo 7805 e um capacitor de 470uF como etapa final adequação de tensão e rejeição á ruído. É de suma importância separar a fonte dos pré amplificadores do circuito digital, pois o volume do ruído de chavemento após a amplificação de 22dB do amplificador se torna inaceitável. 
+Esta placa contém os [FM62429](http://nice.kaze.com/M62429.pdf), os capacidores de desacoplamento DC e filtro passa baixa para os canais do subwoofer. A alimentacão vem da fonte 48V que alimenta o amplificador, sendo reduzida para 12V por um conversor buck devidamente filtrado já na placa amplificadora, e por último, passando pelo 7805 e um capacitor de 470uF como etapa final adequação de tensão e rejeição á ruído. É de suma importância separar a fonte dos pré amplificadores do circuito digital, pois o volume do ruído de chavemento após o ganho de 21.5dB do amplificador se torna inaceitável.
 
 <p align="center">
 <img src="/Implemantacao/Imagens/1.jpg?raw=true" width="36%"> <img src="/Implemantacao/Imagens/2.jpg?raw=true" width="33%">
 </p>
 
-## Amplificador, adaptado para receber a placa de controle de volume, desacoplador DC para o sinal do subwoffer e entrada P2:
+## Amplificador:
+
+Amplificador de som, utilizando o chip [TPA3255](https://www.ti.com/lit/ds/symlink/tpa3255.pdf) modificado de 3 canais (150+150+300W) para 4 canais de 150w, com o objetivo de alimentar dois subwoofers com a impedância adequada no futuro.
+Para os testes, devido as condições, será utilizado:
+* Um subwoofer ativo mono, com um filtro atenuador na entrada
+* Canais L e R estão sendo somados após a filtragem
+* Apenas utilizada uma das saídas de subwoofer. 
+
+Entrada de som adaptada de RCA para P2, podendo utilizar o cabo padrão da própria TV.
+
+O ganho do [TPA3255](https://www.ti.com/lit/ds/symlink/tpa3255.pdf) é fixo em 21.5dB, suficiente para saturar o amplificador com [níveis de linha](https://en.wikipedia.org/wiki/Line_level#Nominal_levels) de uma saída de televisão.
+
+O amplificador já conta com uma fonte 12V de baixo ruído que servia o propósito de alimentar além da linha de pré amplificadores do chip, os amplificadores operacionais originais que faziam o serviço de filtro e controle de ganho.
 
 <p align="center">
   <img src="/Implemantacao/Imagens/3.jpg?raw=true" width="40%"> 
@@ -41,7 +53,16 @@ Esta placa contém os dois FM62429, os capacidores de desacoplamento DC, filtro 
 <img src="/Implemantacao/Imagens/6.jpg?raw=true" width="50%" align="center">
 </p>
 
-## Placa do microcontrolador, contendo os módulos Infravermelho e sensor de temperatura:
+## Placa do microcontrolador:
+
+Possui uma fonte 9V separada dos outros módulos, que além de separar o ruído do amplificador tem o propósito de rodar continuamente.
+
+Resposável pela maior parte das tarefas:  
+* Controlar o volume 
+* Monitorar a temperatura
+* Controlar a televisão
+* Controlar o ar condicionado
+* Receber os sinais do celular ou controle remoto.
 
 <p align="center">
 <img src="/Implemantacao/Imagens/7.jpg?raw=true" width="44%"> <img src="/Implemantacao/Imagens/8.jpg?raw=true" width="21.8%"> <img src="/Implemantacao/Imagens/9.jpg?raw=true" width="33%"> 
