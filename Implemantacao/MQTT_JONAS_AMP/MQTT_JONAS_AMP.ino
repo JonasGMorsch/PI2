@@ -243,21 +243,21 @@ void MQTT_Handler(String topic, String msg)
     }
   }
 
-else if (topic == TOPIC_SUB10)
-{
-  MQTT.publish(TOPIC_SUB10 "/status", msg.c_str(), true);
-  if (msg.toInt())
+  else if (topic == TOPIC_SUB10)
   {
-    IR_SEND_AC.setPower(1);
-    IR_SEND_AC.send();
+    MQTT.publish(TOPIC_SUB10 "/status", msg.c_str(), true);
+    if (msg.toInt())
+    {
+      IR_SEND_AC.setPower(1);
+      IR_SEND_AC.send();
+    }
+    else
+    {
+      IR_SEND_AC.setPower(0);
+      IR_SEND_AC.sendOff();
+      //IR_SEND_AC.send(); // NOT WORKING FOR POWER OFF
+    }
   }
-  else
-  {
-    IR_SEND_AC.setPower(0);
-    IR_SEND_AC.sendOff();
-    //IR_SEND_AC.send(); // NOT WORKING
-  }
-}
 }
 
 void IR_Loop()
