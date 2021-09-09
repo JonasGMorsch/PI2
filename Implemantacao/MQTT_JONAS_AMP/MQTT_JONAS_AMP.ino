@@ -272,6 +272,20 @@ void IR_Loop()
   digitalWrite(LED, LOW);
   switch (results.value)
   {
+    case 0xE0E0E01F:
+      amp_volume++;
+      /*amp_volume = constrain(amp_volume, 0, 83);
+        MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true);*/
+      setVolume(amp_volume);
+      break;
+
+    case 0xE0E0D02F:
+      amp_volume--;
+      /*amp_volume = constrain(amp_volume, 0, 83);
+        MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true);*/
+      setVolume(amp_volume);
+      break;
+
     case 0xE0E0F00F:
       if (amp_mute_control)
       {
@@ -285,7 +299,6 @@ void IR_Loop()
       }
       amp_mute_control = !amp_mute_control;
       delay(10);
-      break;
 
     case 0xE0E052AD:  // PAUSE
       MQTT.publish(TOPIC_SUB2 "/status", "pause", false);
