@@ -19,6 +19,8 @@ https://github.com/crankyoldgit/IRremoteESP8266
 
 ## Controle de Volume e filtro passa baixa:
 
+Esta placa contém os dois FM62429, os capacidores de desacoplamento DC, filtro passa baixa para os canais do subwoofer. A alimentacão vem da fonte 48V que alimenta o amplificador, sendo reduzida para 12V por uma conversor buck devidamente filtrado, e por último, passando pelo 7805 e um capacitor de 470uF como etapa final adequação de tensão e rejeição á ruído. É de suma importância separar a fonte dos pré amplificadores do circuito digital, pois o volume do ruído de chavemento após a amplificação de 22dB do amplificador se torna inaceitável. 
+
 <p align="center">
 <img src="/Implemantacao/Imagens/1.jpg?raw=true" width="36%"> <img src="/Implemantacao/Imagens/2.jpg?raw=true" width="33%">
 </p>
