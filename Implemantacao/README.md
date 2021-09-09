@@ -14,13 +14,6 @@ Datasheet : http://datasheet.elcodis.com/pdf2/76/14/761466/fm62429.pdf
 ### Controle Infravermelho
 https://github.com/crankyoldgit/IRremoteESP8266
 
-# Não Testadas:
-
-
-Tipo de IR a ser usada : https://clickermart.com/blogs/news/what-is-the-wavelength-of-the-infrared-used-in-remote-controls/
-
-Loja : https://www.aliexpress.com/item/32995488646.html
-
 
 # Módulos:
 
