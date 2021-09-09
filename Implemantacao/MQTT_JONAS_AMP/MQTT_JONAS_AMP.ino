@@ -242,7 +242,7 @@ void MQTT_Handler(String topic, String msg)
       IR_SEND_AC.send(); // The raw packet messes with other settings, restore tem by resending the actual state
     }
   }
-}
+
 else if (topic == TOPIC_SUB10)
 {
   MQTT.publish(TOPIC_SUB10 "/status", msg.c_str(), true);
