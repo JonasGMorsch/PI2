@@ -1,6 +1,5 @@
-#define HOST_NAME "TESTNODE" //OTA NAME
+#define HOST_NAME "MQTT_JONAS_AMP" //OTA NAME
 #define DTIM 10 // 0 FULL ON - 1 LESS LATENCY - 10 LESS POWER
-#include "JONAS_MQTT.h"  //MY LIBRARY WRAPER
 //define DEBUG
 
 //////////////////////////////////// MQTT SUB TOPICS ////////////////////////////////////
@@ -8,6 +7,12 @@
 //////////////////////////////////// MQTT PUB TOPICS ////////////////////////////////////
 #define TOPIC_PUB1  "test2"
 /////////////////////////////////////////////////////////////////////////////////////////
+
+#include "JONAS_MQTT.h"  //MY LIBRARY WRAPER
+#include <IRremoteESP8266.h>
+#include <IRrecv.h>
+#include <IRsend.h>
+#include <ir_Samsung.h>
 
 #define VOLUME_SCL_BASS D1
 #define VOLUME_SCL_MAIN D2
@@ -23,8 +28,16 @@
 void setVolume(uint32_t);
 void setDataFM(uint32_t, uint32_t, uint32_t);
 
-//uint32_t amp_volume = 45;
+uint32_t amp_volume = 45;
 uint32_t sub_level_adj = 10;
+uint32_t amp_mute_control;
+const uint32_t amp_mute_volume = 13;
+
+//IRrecv IR_REC(IR_RECORDER, 128, 5, false); //TEST THIS!!!
+IRrecv IR_REC(IR_RECORDER);
+IRsend IR_SEND(IR_SENDER);  // An IR LED at this pin
+IRSamsungAc IR_SEND_AC(IR_SENDER);
+decode_results results;  // Somewhere to store the results
 
 void MQTT_Handler(String topic, String msg)
 {
@@ -45,6 +58,50 @@ void MQTT_Handler(String topic, String msg)
 
 }
 
+void IR_Loop()
+{
+  //delay(50);
+  digitalWrite(LED, LOW);
+  switch (results.value)
+  {
+    case 0xE0E0E01F:
+      amp_volume++;
+      /*amp_volume = constrain(amp_volume, 0, 83);
+        MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true);*/
+      setVolume(amp_volume);
+      break;
+
+    case 0xE0E0D02F:
+      amp_volume--;
+      /*amp_volume = constrain(amp_volume, 0, 83);
+        MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true);*/
+      setVolume(amp_volume);
+      break;
+
+    case 0xE0E0F00F:
+      if (amp_mute_control)
+      {
+        setVolume(amp_mute_volume);
+      }
+      else
+      {
+        setVolume(amp_volume);
+      }
+      amp_mute_control = !amp_mute_control;
+      delay(10);
+      break;
+    default:
+      //MQTT.publish("mqtt/debug", (String("0x") + String((uint32_t)results.value, HEX)).c_str() , false);
+      //MQTT.publish("mqtt/debug", (String("0x") + String((uint32_t)results.value, HEX).toUpperCase()).c_str() , false);
+
+      /*String hex = String((uint32_t)results.value, HEX);
+        hex.toUpperCase();
+        MQTT.publish("mqtt/debug", (String("0x") + hex).c_str() , false);*/
+      break;
+  }
+  digitalWrite(LED, HIGH);
+}
+
 void setup()
 {
   pinMode(D0, INPUT_PULLUP);
@@ -60,11 +117,19 @@ void setup()
   pinMode(D10, INPUT_PULLUP);
 
   servicesSetup();
-  initMQTT();
+  IR_REC.setUnknownThreshold(32); // MINIMUM READABLE BYTE SET
+  IR_REC.enableIRIn();  // Start the receiver
+  IR_SEND.begin(); // Start the sender
 }
 
 void loop()
 {
+  if (IR_REC.decode(&results)) // Check if the IR code has been received.
+  {
+    IR_REC.resume();  // Receive the next value
+    IR_Loop();
+  }
+  
   servicesLoop();
 }
 
