@@ -8,6 +8,13 @@
 
 #define TOPIC_SUB3  "house/jonasbedroom/sound/volume/0t100"
 #define TOPIC_SUB4  "house/jonasbedroom/sound/mute/switch"
+
+#define TOPIC_SUB5  "house/jonasbedroom/ac/mode/0t4"
+#define TOPIC_SUB6  "house/jonasbedroom/ac/fan/0t7"
+#define TOPIC_SUB7  "house/jonasbedroom/ac/swing/switch"
+#define TOPIC_SUB8  "house/jonasbedroom/ac/temperature/16t30"
+#define TOPIC_SUB9  "house/jonasbedroom/ac/beep/switch"
+#define TOPIC_SUB10 "house/jonasbedroom/ac/power/switch"
 //////////////////////////////////// MQTT PUB TOPICS ////////////////////////////////////
 #define TOPIC_PUB_TEMP  "house/jonasbedroom/bedroom/temperature/status"
 #define TOPIC_PUB_HUM   "house/jonasbedroom/bedroom/humidity/status"
@@ -38,7 +45,7 @@ void Temp_Check(void);
 // VARIABLES & GLOBAL OBJECTS
 GY21 sensor;
 uint32_t amp_volume = 45;
-uint32_t sub_level_adj = 10;
+uint32_t sub_level_adj = 10; // Sub Volume is the same as the main volume
 uint32_t amp_mute_control;
 const uint32_t amp_mute_volume = 13;
 
@@ -121,6 +128,78 @@ void MQTT_Handler(String topic, String msg)
     MQTT.publish(TOPIC_SUB4 "/status", msg.c_str(), true);
     MQTT.publish(TOPIC_SUB3 "/status", String(amp_volume).c_str(), true);
   }
+  else if (topic == TOPIC_SUB5)
+  {
+    if (msg.toInt() >= 0 && msg.toInt() <= 4)
+    {
+      MQTT.publish(TOPIC_SUB5 "/status", msg.c_str(), true);
+      IR_SEND_AC.setMode(msg.toInt());
+
+      if (IR_SEND_AC.getPower())
+        IR_SEND_AC.send();
+    }
+  }
+
+  else if (topic == TOPIC_SUB6)
+  {
+    if (msg.toInt() >= 0 && msg.toInt() <= 7)
+    {
+      MQTT.publish(TOPIC_SUB6 "/status", msg.c_str(), true);
+      IR_SEND_AC.setFan(msg.toInt());
+
+      if (IR_SEND_AC.getPower())
+        IR_SEND_AC.send();
+    }
+  }
+
+  else if (topic == TOPIC_SUB7)
+  {
+    MQTT.publish(TOPIC_SUB7 "/status", msg.c_str(), true);
+    //    if ()
+    //      IR_SEND_AC.setSwing(1);
+    //    else
+    //      IR_SEND_AC.setSwing(0);
+
+    IR_SEND_AC.setSwing(msg.toInt());
+
+    if (IR_SEND_AC.getPower())
+      IR_SEND_AC.send();
+  }
+
+  else if (topic == TOPIC_SUB8)
+  {
+    if (msg.toInt() >= 16 && msg.toInt() <= 30)
+    {
+      MQTT.publish(TOPIC_SUB8 "/status", msg.c_str(), true);
+      IR_SEND_AC.setTemp(msg.toInt());
+      if (IR_SEND_AC.getPower())
+        IR_SEND_AC.send();
+    }
+  }
+  else if (topic == TOPIC_SUB9) // BEEP
+  {
+    MQTT.publish(TOPIC_SUB9 "/status", msg.c_str(), true);
+    //    if (IR_SEND_AC.getPower())
+    //      if (msg.toInt())
+    //        IR_SEND_AC.setIon(1);
+    //      else
+    //        IR_SEND_AC.setIon(0);
+  }
+  else if (topic == TOPIC_SUB10)
+  {
+    MQTT.publish(TOPIC_SUB10 "/status", msg.c_str(), true);
+    if (msg.toInt())
+    {
+      IR_SEND_AC.setPower(1);
+      IR_SEND_AC.send();
+    }
+    else
+    {
+      IR_SEND_AC.setPower(0);
+      IR_SEND_AC.sendOff();
+      //IR_SEND_AC.send(); // NOT WORKING
+    }
+  }
 }
 
 void IR_Loop()
@@ -181,7 +260,7 @@ void setup()
   IR_SEND_AC.begin(); // Start AC sender
   IR_SEND_AC.setIon(1); // VIRUS DOCTOR
   IR_SEND_AC.setPower(0);
-  
+
   Wire.TwoWire::begin(SDA, SCL);
   Wire.TwoWire::setClock(400000);
 }
@@ -197,7 +276,7 @@ void loop()
   esp8266::polledTimeout::periodic static temp_timer(10000);
   if (temp_timer)
     Temp_Check();
-    
+
   esp8266::polledTimeout::periodic static amp_volume_timer(250);
   if (amp_volume_timer)
   {
@@ -209,7 +288,7 @@ void loop()
       MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true);
     }
   }
-  
+
   servicesLoop();
 }
 
