@@ -184,27 +184,80 @@ void MQTT_Handler(String topic, String msg)
   else if (topic == TOPIC_SUB9) // BEEP
   {
     MQTT.publish(TOPIC_SUB9 "/status", msg.c_str(), true);
+    //    if (msg.toInt())
+    //      IR_SEND_AC.setBeep(1);
+    //    else
+    //      IR_SEND_AC.setBeep(0);
+
+    //    if (msg.toInt())
+    //      IR_SEND_AC.setQuiet(1);
+    //    else
+    //      IR_SEND_AC.setQuiet(0);
+
+
     //    if (IR_SEND_AC.getPower())
-    //      if (msg.toInt())
-    //        IR_SEND_AC.setIon(1);
-    //      else
-    //        IR_SEND_AC.setIon(0);
+    //      IR_SEND_AC.send();
+
+    //uint8_t samsung_ac_beep[] = {76,42,111,181,0,0,0,0,0,0,0,0,0,0};
+    //uint8_t samsung_ac_beep[] = {88,225,241,79,0,0,0,0,0,0,0,0,0};
+    //uint8_t samsung_ac_beep[] = {241, 110, 78, 172, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    uint16_t  samsung_ac_beep[] =
+    {
+      694,  17304,      3090,   8878,       592,    404,       592,   1398,
+      590,    404,       590,    404,       618,    378,       590,    406,
+      588,    406,       588,    408,       586,    410,       586,   1426,
+      564,    430,       476,    520,       576,   1412,       584,    410,
+      586,    410,       588,   1400,       592,   1398,       592,   1398,
+      592,   1400,       590,   1402,       590,    404,       588,    408,
+      586,    412,       582,    430,       564,    430,       500,    496,
+      552,    422,       654,    360,       584,    408,       588,    408,
+      616,    378,       592,    402,       618,    376,       592,    386,
+      608,    406,       590,    404,       590,    404,       592,    406,
+      616,    378,       590,    404,       590,    408,       586,    430,
+      566,    428,       478,    518,       580,    414,       582,    412,
+      586,    408,       588,    406,       590,    404,       616,    378,
+      618,    376,       592,    402,       616,   1372,       592,   1400,
+      590,   1402,       616,   1376,       608,   2884,      3088,   8884,
+      478,   1514,       608,    386,       612,    382,       588,    406,
+      590,    406,       592,    402,       594,    402,       592,    402,
+      592,    402,       644,   1346,       592,    404,       592,    404,
+      590,    406,       588,   1404,       588,    430,       564,   1426,
+      618,    374,       582,   1408,       588,   1402,       590,   1400,
+      592,   1398,       592,   1398,       592,   1398,       592,   1400,
+      590,   1402,       588,    406,       588,    430,       564,    432,
+      564,   1426,       582,   1408,       586,   1404,       590,    404,
+      592,    402,       592,    404,       618,    378,       592,    404,
+      590,    404,       618,    376,       616,    380,       590,   1402,
+      588,   1404,       610,   1400,       566,    430,       582,   1408,
+      584,   1406,       590,   1400,       592,    404,       592,    402,
+      592,    402,       592,    402,       592,   1398,       592,    404,
+      590,   1402,       588,   1402,       614,   1398,       566,   1426,
+      616
+    };
+
+    if (IR_SEND_AC.getPower())
+    {
+      IR_SEND.sendRaw(samsung_ac_beep, sizeof(samsung_ac_beep) / sizeof(uint16_t), 38);
+      IR_SEND_AC.send(); // The raw packet messes with other settings, restore tem by resending the actual state
+    }
   }
-  else if (topic == TOPIC_SUB10)
+}
+else if (topic == TOPIC_SUB10)
+{
+  MQTT.publish(TOPIC_SUB10 "/status", msg.c_str(), true);
+  if (msg.toInt())
   {
-    MQTT.publish(TOPIC_SUB10 "/status", msg.c_str(), true);
-    if (msg.toInt())
-    {
-      IR_SEND_AC.setPower(1);
-      IR_SEND_AC.send();
-    }
-    else
-    {
-      IR_SEND_AC.setPower(0);
-      IR_SEND_AC.sendOff();
-      //IR_SEND_AC.send(); // NOT WORKING
-    }
+    IR_SEND_AC.setPower(1);
+    IR_SEND_AC.send();
   }
+  else
+  {
+    IR_SEND_AC.setPower(0);
+    IR_SEND_AC.sendOff();
+    //IR_SEND_AC.send(); // NOT WORKING
+  }
+}
 }
 
 void IR_Loop()
@@ -213,7 +266,7 @@ void IR_Loop()
   digitalWrite(LED, LOW);
   switch (results.value)
   {
-case 0xE0E0F00F:
+    case 0xE0E0F00F:
       if (amp_mute_control)
       {
         setVolume(amp_mute_volume);
