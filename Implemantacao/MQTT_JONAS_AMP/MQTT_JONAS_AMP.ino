@@ -3,9 +3,14 @@
 //define DEBUG
 
 //////////////////////////////////// MQTT SUB TOPICS ////////////////////////////////////
-#define TOPIC_SUB1  "test1"
+#define TOPIC_SUB1  "house/jonasbedroom/tv/switch/status"
+#define TOPIC_SUB2  "house/jonasbedroom/tv/control"
+
+#define TOPIC_SUB3  "house/jonasbedroom/sound/volume/0t100"
+#define TOPIC_SUB4  "house/jonasbedroom/sound/mute/switch"
 //////////////////////////////////// MQTT PUB TOPICS ////////////////////////////////////
-#define TOPIC_PUB1  "test2"
+#define TOPIC_PUB_TEMP  "house/jonasbedroom/bedroom/temperature/status"
+#define TOPIC_PUB_HUM   "house/jonasbedroom/bedroom/humidity/status"
 /////////////////////////////////////////////////////////////////////////////////////////
 
 #include "JONAS_MQTT.h"  //MY LIBRARY WRAPER
@@ -13,6 +18,7 @@
 #include <IRrecv.h>
 #include <IRsend.h>
 #include <ir_Samsung.h>
+#include <GY21.h>
 
 #define VOLUME_SCL_BASS D1
 #define VOLUME_SCL_MAIN D2
@@ -24,10 +30,13 @@
 #define IR_SENDER   D7
 #define IR_RECORDER D9
 
-// VARIABLES & GLOBAL OBJECTS
+// PROTOTYPES
 void setVolume(uint32_t);
 void setDataFM(uint32_t, uint32_t, uint32_t);
+void Temp_Check(void);
 
+// VARIABLES & GLOBAL OBJECTS
+GY21 sensor;
 uint32_t amp_volume = 45;
 uint32_t sub_level_adj = 10;
 uint32_t amp_mute_control;
@@ -41,21 +50,20 @@ decode_results results;  // Somewhere to store the results
 
 void MQTT_Handler(String topic, String msg)
 {
-  if (topic == "blink")
+  //DEVICES STATUS
+  static bool tvpower = 0; //INITIAL STATE
+  
+  if (topic == TOPIC_SUB1)
   {
-    if (msg == "blink")
+    if (tvpower == 0 && msg.toInt() == 1)
     {
-      delay (100);
+      tvpower = 1;
+    }
+    else if (tvpower == 1 && msg.toInt() == 0)
+    {
+      tvpower = 0;
     }
   }
-
-  else if (topic == TOPIC_SUB1) //VOLUME
-  {
-    int amp_volume = msg.toInt();
-    setDataFM(amp_volume, VOLUME_SCL_MAIN, VOLUME_SDA);
-    MQTT.publish(TOPIC_SUB1 "/status", String(amp_volume).c_str(), true);
-  }
-
 }
 
 void IR_Loop()
@@ -117,9 +125,13 @@ void setup()
   pinMode(D10, INPUT_PULLUP);
 
   servicesSetup();
+
   IR_REC.setUnknownThreshold(32); // MINIMUM READABLE BYTE SET
   IR_REC.enableIRIn();  // Start the receiver
   IR_SEND.begin(); // Start the sender
+
+  Wire.TwoWire::begin(SDA, SCL);
+  Wire.TwoWire::setClock(400000);
 }
 
 void loop()
@@ -129,7 +141,11 @@ void loop()
     IR_REC.resume();  // Receive the next value
     IR_Loop();
   }
-  
+
+  esp8266::polledTimeout::periodic static temp_timer(10000);
+  if (temp_timer)
+    Temp_Check();
+
   servicesLoop();
 }
 
@@ -173,4 +189,24 @@ void setDataFM (uint32_t volume, uint32_t serial_clock, uint32_t serial_data)
   digitalWrite (serial_data, 1);
   delayMicroseconds (2);
   digitalWrite (serial_clock, 0); //final clock latches data in
+}
+
+void Temp_Check(void)
+{
+  static float published_temp;
+  static float published_hum;
+  float hum = sensor.GY21_Humidity();
+  float temp = sensor.GY21_Temperature();
+
+  if (roundf(published_temp * 10.0) != roundf(temp * 10.0))
+  {
+    MQTT.publish(TOPIC_PUB_TEMP, (String(temp, 1)).c_str(), true);
+    published_temp = roundf(temp * 10.0) / 10.0;
+  }
+
+  if (roundf(published_hum * 10.0) != roundf(hum * 10.0))
+  {
+    MQTT.publish(TOPIC_PUB_HUM, (String(hum, 1)).c_str(), true);
+    published_hum = roundf(hum * 10.0) / 10.0;
+  }
 }
