@@ -1,20 +1,3 @@
-# Bibliotecas Testadas:
-
-### Arduino para ESP8266, contém bibliotecas para wifi, i2c e afins.
-https://github.com/esp8266/Arduino
-
-### Biblioteca MQTT
-https://github.com/knolleary/pubsubclient
-
-### Controle de Volume
-https://github.com/CGrassin/M62429_Arduino_Library
-
-Datasheet : http://datasheet.elcodis.com/pdf2/76/14/761466/fm62429.pdf
-
-### Controle Infravermelho
-https://github.com/crankyoldgit/IRremoteESP8266
-
-
 # Módulos:
 
 ## Controle de Volume:
@@ -72,3 +55,39 @@ Resposável pela maior parte das tarefas:
 <p align="center">
 <img src="/Implemantacao/Imagens/10.jpg?raw=true" width="70%">
 </p>
+
+# Programação:
+
+
+## Teste de componentes e bibliotecas:
+
+O programa para construção do código é a IDE do [Arduino](https://www.arduino.cc/en/Guide), em conjunto com o [compilador e bibliotecas adaptadas](https://github.com/esp8266/Arduino) para o [ESP8266](https://www.espressif.com/sites/default/files/documentation/0a-esp8266ex_datasheet_en.pdf), utilizando a versão já configurada e testada disponível neste repositório:
+
+https://github.com/JonasGMorsch/My-Arduino-IDE-for-ESP8266
+
+Biblioteca MQTT
+
+https://github.com/knolleary/pubsubclient
+
+[Código de Validacão](/Implemantacao/mqtt_esp8266/mqtt_esp8266.ino)
+
+Controle de Volume
+
+https://github.com/CGrassin/M62429_Arduino_Library
+
+[Código de Validacão](/Implemantacao/FM62429/FM62429.ino)
+
+Controle Infravermelho
+
+https://github.com/crankyoldgit/IRremoteESP8266
+
+[Código de Validacão](/Implemantacao/IRrecvDumpV2/IRrecvDumpV2.ino)
+
+Monitoramento de Temperatura e Humidade:
+
+https://github.com/JonasGMorsch/GY-21
+
+O código já foi validado.
+
+## Código Completo
+[MQTT_JONAS_AMP](/Implemantacao/MQTT_JONAS_AMP/MQTT_JONAS_AMP.ino)
