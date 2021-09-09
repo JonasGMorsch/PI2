@@ -18,6 +18,7 @@
 //////////////////////////////////// MQTT PUB TOPICS ////////////////////////////////////
 #define TOPIC_PUB_TEMP  "house/jonasbedroom/bedroom/temperature/status"
 #define TOPIC_PUB_HUM   "house/jonasbedroom/bedroom/humidity/status"
+#define TOPIC_PUB_LED   "house/jonasbedroom/ledstripe/rgb"
 /////////////////////////////////////////////////////////////////////////////////////////
 
 #include "JONAS_MQTT.h"  //MY LIBRARY WRAPER
@@ -212,32 +213,73 @@ void IR_Loop()
   digitalWrite(LED, LOW);
   switch (results.value)
   {
-    case 0xE0E0E01F:
-      amp_volume++;
-      /*amp_volume = constrain(amp_volume, 0, 83);
-        MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true);*/
-      setVolume(amp_volume);
-      break;
-
-    case 0xE0E0D02F:
-      amp_volume--;
-      /*amp_volume = constrain(amp_volume, 0, 83);
-        MQTT.publish(TOPIC_SUB3, String(amp_volume).c_str(), true);*/
-      setVolume(amp_volume);
-      break;
-
-    case 0xE0E0F00F:
+case 0xE0E0F00F:
       if (amp_mute_control)
       {
         setVolume(amp_mute_volume);
+        MQTT.publish(TOPIC_SUB4 "/status", "1", true);
       }
       else
       {
         setVolume(amp_volume);
+        MQTT.publish(TOPIC_SUB4 "/status", "0", true);
       }
       amp_mute_control = !amp_mute_control;
       delay(10);
       break;
+
+    case 0xE0E052AD:  // PAUSE
+      MQTT.publish(TOPIC_SUB2 "/status", "pause", false);
+      break;
+
+    case 0xE0E0E21D:  // PLAY
+      MQTT.publish(TOPIC_SUB2 "/status", "play", false);
+      break;
+
+    case 0xE0E08877:  //N0
+      MQTT.publish(TOPIC_PUB_LED, "#000000", true);
+      break;
+
+    case 0xE0E020DF:  //N1
+      MQTT.publish(TOPIC_PUB_LED, "#401400", true);
+      break;
+
+    case 0xE0E0A05F:  //N2
+      MQTT.publish(TOPIC_PUB_LED, "#802700", true);
+      break;
+
+    case 0xE0E0609F:  //N3
+      MQTT.publish(TOPIC_PUB_LED, "#FF4D00", true);
+      break;
+
+    case 0xE0E010EF:  //N4
+      MQTT.publish(TOPIC_PUB_LED, "#403318", true);
+      break;
+
+    case 0xE0E0906F:  //N5
+      MQTT.publish(TOPIC_PUB_LED, "#806530", true);
+      break;
+
+    case 0xE0E050AF:  //N6
+      MQTT.publish(TOPIC_PUB_LED, "#FFC960", true);
+      break;
+
+    case 0xE0E030CF:  //N7
+      MQTT.publish(TOPIC_PUB_LED, "#400808", true);
+      break;
+
+    case 0xE0E0B04F:  //N8
+      MQTT.publish(TOPIC_PUB_LED, "#801010", true);
+      break;
+
+    case 0xE0E0708F:  //N9
+      MQTT.publish(TOPIC_PUB_LED, "#FF2020", true);
+      break;
+
+    case 0xE0E0C43B:  //N-
+      MQTT.publish(TOPIC_SUB7, String(!(IR_SEND_AC.getSwing())).c_str(), true);
+      break;
+
     default:
       //MQTT.publish("mqtt/debug", (String("0x") + String((uint32_t)results.value, HEX)).c_str() , false);
       //MQTT.publish("mqtt/debug", (String("0x") + String((uint32_t)results.value, HEX).toUpperCase()).c_str() , false);
@@ -368,7 +410,7 @@ void Temp_Check(void)
     //const uint8_t kSamsungAcFan = 3;
     //const uint8_t kSamsungAcHeat = 4;
 
-    if ( ! IR_SEND_AC.getMode() == kSamsungAcFan )
+    if (!( IR_SEND_AC.getMode() == kSamsungAcFan ))
     {
       static double ac_temp_integral;
       if ( abs ( ac_temp_integral ) < 3.f ) // limit value to +-3 Celsius shift
@@ -383,7 +425,7 @@ void Temp_Check(void)
         IR_SEND_AC.setTemp(ac_temp);
         IR_SEND_AC.send();
         MQTT.publish("debug", (String ("ac: ") + String (ac_temp) + (String ("\npi: ") + String (ac_temp_integral, 3))).c_str() , true);
-        ac_send.reset();
+        ac_send.reset(); // signal sent, no need to send untill the next timestep
       }
     }
   }
