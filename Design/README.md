@@ -21,3 +21,7 @@
  
 A escolha de GPIO foi direcionada pelo seu comportamentos na inicialização: 
 ![Design](/Design/GPIO_Limitations_ESP8266_NodeMCU.jpg) 
+
+
+Segundo esquemático, com todos os componentes definidos.
+![Design](/Design/Circuito_Completo.BMP) 
