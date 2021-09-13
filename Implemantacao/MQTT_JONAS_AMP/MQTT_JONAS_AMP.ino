@@ -67,50 +67,53 @@ void MQTT_Handler(String topic, String msg)
 {
   if (topic == TOPIC_SUB2)
   {
-    if (msg == "power" || msg ==  "0" || msg ==  "1")
-      IR_SEND.sendSAMSUNG(0xE0E040BF); // POWER
-    else if (msg == "source")
-      IR_SEND.sendSAMSUNG(0xE0E0807F); // SOURCE
-    else if (msg == "channelup")
-      IR_SEND.sendSAMSUNG(0xE0E048B7); // CH +
-    else if (msg == "channeldown")
-      IR_SEND.sendSAMSUNG(0xE0E008F7); // CH -
-    else if (msg == "content")
-      IR_SEND.sendSAMSUNG(0xE0E09E61); // CONTENT
-    else if (msg == "menu")
-      IR_SEND.sendSAMSUNG(0xE0E058A7); // MENU
-    else if (msg == "guide")
-      IR_SEND.sendSAMSUNG(0xE0E0F20D); // GUIDE
-    else if (msg == "tools")
-      IR_SEND.sendSAMSUNG(0xE0E0D22D); // TOOLS
-    else if (msg == "info")
-      IR_SEND.sendSAMSUNG(0xE0E0F807); // INFO
-    else if (msg == "enter")
-      IR_SEND.sendSAMSUNG(0xE0E016E9); // ENTER
-    else if (msg == "up")
-      IR_SEND.sendSAMSUNG(0xE0E006F9); // UP
-    else if (msg == "down")
-      IR_SEND.sendSAMSUNG(0xE0E08679); // DOWN
-    else if (msg == "left")
-      IR_SEND.sendSAMSUNG(0xE0E0A659); // LEFT
-    else if (msg == "right")
-      IR_SEND.sendSAMSUNG(0xE0E046B9); // RIGHT
-    else if (msg == "return")
-      IR_SEND.sendSAMSUNG(0xE0E01AE5); // RETURN
-    else if (msg == "exit")
-      IR_SEND.sendSAMSUNG(0xE0E0B44B); // EXIT
-    else if (msg == "back")
-      IR_SEND.sendSAMSUNG(0xE0E0A25D); // BACK
-    else if (msg == "play")
+    if ((millis() - mqttConnectionTimeStamp) > 5000)
     {
-      IR_SEND.sendSAMSUNG(0xE0E0E21D); // PLAY
-      MQTT.publish(TOPIC_SUB2 "/status", "play", false);
-    }
-    else if (msg == "pause")
-    {
-      IR_SEND.sendSAMSUNG(0xE0E052AD); // PAUSE
-      //MQTT.publish((String(TOPIC_SUB2) + "/status").c_str(), "pause", false);
-      MQTT.publish(TOPIC_SUB2 "/status", "pause", false);
+      if (msg ==  "0" || msg ==  "1")
+        IR_SEND.sendSAMSUNG(0xE0E040BF); // POWER
+      else if (msg == "source")
+        IR_SEND.sendSAMSUNG(0xE0E0807F); // SOURCE
+      else if (msg == "channelup")
+        IR_SEND.sendSAMSUNG(0xE0E048B7); // CH +
+      else if (msg == "channeldown")
+        IR_SEND.sendSAMSUNG(0xE0E008F7); // CH -
+      else if (msg == "content")
+        IR_SEND.sendSAMSUNG(0xE0E09E61); // CONTENT
+      else if (msg == "menu")
+        IR_SEND.sendSAMSUNG(0xE0E058A7); // MENU
+      else if (msg == "guide")
+        IR_SEND.sendSAMSUNG(0xE0E0F20D); // GUIDE
+      else if (msg == "tools")
+        IR_SEND.sendSAMSUNG(0xE0E0D22D); // TOOLS
+      else if (msg == "info")
+        IR_SEND.sendSAMSUNG(0xE0E0F807); // INFO
+      else if (msg == "enter")
+        IR_SEND.sendSAMSUNG(0xE0E016E9); // ENTER
+      else if (msg == "up")
+        IR_SEND.sendSAMSUNG(0xE0E006F9); // UP
+      else if (msg == "down")
+        IR_SEND.sendSAMSUNG(0xE0E08679); // DOWN
+      else if (msg == "left")
+        IR_SEND.sendSAMSUNG(0xE0E0A659); // LEFT
+      else if (msg == "right")
+        IR_SEND.sendSAMSUNG(0xE0E046B9); // RIGHT
+      else if (msg == "return")
+        IR_SEND.sendSAMSUNG(0xE0E01AE5); // RETURN
+      else if (msg == "exit")
+        IR_SEND.sendSAMSUNG(0xE0E0B44B); // EXIT
+      else if (msg == "back")
+        IR_SEND.sendSAMSUNG(0xE0E0A25D); // BACK
+      else if (msg == "play")
+      {
+        IR_SEND.sendSAMSUNG(0xE0E0E21D); // PLAY
+        MQTT.publish(TOPIC_SUB2 "/status", "play", false);
+      }
+      else if (msg == "pause")
+      {
+        IR_SEND.sendSAMSUNG(0xE0E052AD); // PAUSE
+        //MQTT.publish((String(TOPIC_SUB2) + "/status").c_str(), "pause", false);
+        MQTT.publish(TOPIC_SUB2 "/status", "pause", false);
+      }
     }
   }
   else if (topic == TOPIC_SUB3) //VOLUME
@@ -299,6 +302,7 @@ void IR_Loop()
       }
       amp_mute_control = !amp_mute_control;
       delay(10);
+      break;
 
     case 0xE0E052AD:  // PAUSE
       MQTT.publish(TOPIC_SUB2 "/status", "pause", false);
@@ -409,7 +413,7 @@ void loop()
   servicesLoop();
 }
 
-// this function does the job
+
 void setVolume(uint32_t v)
 {
   v = min(v, 83U);
@@ -421,8 +425,6 @@ void setVolume(uint32_t v)
 }
 void setDataFM (uint32_t volume, uint32_t serial_clock, uint32_t serial_data)
 {
-  //pinMode(serial_data, OUTPUT);
-  //uint32_t bits;
   uint32_t data = 0; // control word is built by OR-ing in the bits
 
   // convert attenuation to volume

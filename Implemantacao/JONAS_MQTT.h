@@ -12,6 +12,7 @@
 
 WiFiClient espClient; // Make object espClient
 PubSubClient MQTT(espClient); // PASS WIFI OBJECT TO MQTT HANDLER
+uint32_t mqttConnectionTimeStamp;
 
 void mqttCallback(char*, byte*, unsigned int);
 void MQTT_Handler(String, String);
@@ -103,7 +104,7 @@ void MQTT_Whatchdog()
 
     if  (MQTT.connect(CHIP_ID, MQTT_USER, MQTT_PASSWORD)) //if umprotected use (MQTT.connect(MAC))
     {
-      
+
 #ifdef DEBUG
       Serial.println("Successfully Connected to MQTT Broker!");
 #endif
@@ -146,6 +147,7 @@ void MQTT_Whatchdog()
 #ifdef TOPIC_SUB12
       MQTT.subscribe(TOPIC_SUB12, 1);
 #endif
+      mqttConnectionTimeStamp = millis();
     }
 #ifdef DEBUG
     else
