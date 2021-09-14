@@ -1,4 +1,4 @@
-# Projeto
+# Design
 
 ## Componentes Utilizados:
 
