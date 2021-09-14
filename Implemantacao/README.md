@@ -56,8 +56,14 @@ Resposável pela maior parte das tarefas:
 <img src="/Implemantacao/Imagens/10.jpg?raw=true" width="70%">
 </p>
 
-# Programação:
+## Outros Dispositivos:
+Banana Pi, rodando o servidor MQTT e aplicativo MQTT Dash configurado:
+<p align="center">
+  <img src="/Implemantacao/Imagens/11.jpg?raw=true" width="50%">
+  <img src="/Implemantacao/Imagens/12.jpg?raw=true" width="20%">
+</p>
 
+# Programação:
 
 ## Teste de componentes e bibliotecas:
 
@@ -87,7 +93,7 @@ Monitoramento de Temperatura e Humidade:
 
 https://github.com/JonasGMorsch/GY-21
 
-O código já foi validado.
+O código já foi validado no próprio repositório
 
 ## Código Completo
 [MQTT_JONAS_AMP](/Implemantacao/MQTT_JONAS_AMP/MQTT_JONAS_AMP.ino)
