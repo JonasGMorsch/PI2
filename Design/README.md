@@ -15,14 +15,20 @@
 01 [VSMY98545ADS](https://www.vishay.com/docs/84390/vsmy98545ads.pdf) - Led Infravermelho 3W
 
 ## Esquemático de Montagem utizando o [Fritzing](https://fritzing.org): 
-### [Download PI2.fzz](/Design/PI2.fzz)
+### [Download PI2.fzz](/Design/PI2.fzz?raw=true)
 
-![ ](/Design/PI2_schem.png?raw=true) 
+<p align="center">
+  <img src="/Design/PI2_schem.png?raw=true" width="70%">
+</p>
  
 A escolha de GPIO foi direcionada pelo seu comportamentos na inicialização: 
-![ ](/Design/GPIO_Limitations_ESP8266_NodeMCU.jpg?raw=true) 
-
+<p align="center">
+  <img src="/Design/GPIO_Limitations_ESP8266_NodeMCU.jpg?raw=true" width="70%">
+</p>
 
 ## Segundo esquemático, com todos os componentes e pinos definidos.
-![ ](/Design/Circuito_Completo.BMP?raw=true) 
+<p align="center">
+  <img src="/Design/Circuito_Completo.BMP?raw=true" width="90%">
+</p>
 
+Devido á limitação de materiais e fabricação será utilizada placas prefuradas e fiação no lugar de uma placa de circuito impresso.
